@@ -24,9 +24,7 @@ services:
   backend:
     depends_on:
       - database
-    build:
-      context: backend/.
-      dockerfile: Dockerfile
+    image: riosventosalucas/poc-lumen-backend:latest
     volumes:
       - ./backend:/var/www/html
     networks:
@@ -36,9 +34,7 @@ services:
     deploy:
       replicas: 3
   api-gateway:
-    build:
-      context: api-gateway/.
-      dockerfile: Dockerfile
+    image: riosventosalucas/poc-lumen-api-gateway:latest
     volumes:
       - ./api-gateway:/var/www/html
     networks:
@@ -48,9 +44,7 @@ services:
     deploy:
       replicas: 1
   frontend:
-    build:
-      context: frontend/.
-      dockerfile: Dockerfile
+    image: riosventosalucas/poc-lumen-frontend:latest
     volumes:
       - ./frontend:/var/www/html
     networks:
