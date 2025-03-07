@@ -1,0 +1,64 @@
+version: '3.9'
+services:
+  reverse-proxy:
+    image: traefik:v3.3
+    command: --api.insecure=true --providers.docker
+    networks:
+      - app_network
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  database:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: backend
+      MYSQL_USER: backend
+      MYSQL_PASSWORD: backend
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      - app_network
+  backend:
+    depends_on:
+      - database
+    build:
+      context: backend/.
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - app_network
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`backend.docker.localhost`)"
+    deploy:
+      replicas: 3
+  api-gateway:
+    build:
+      context: api-gateway/.
+      dockerfile: Dockerfile
+    volumes:
+      - ./api-gateway:/var/www/html
+    networks:
+      - app_network
+    labels:
+      - "traefik.http.routers.api-gateway.rule=Host(`api-gateway.docker.localhost`)"
+    deploy:
+      replicas: 1
+  frontend:
+    build:
+      context: frontend/.
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/var/www/html
+    networks:
+      - app_network
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`frontend.docker.localhost`)"
+    deploy:
+      replicas: 1
+
+networks:
+  app_network:

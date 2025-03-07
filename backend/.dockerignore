@@ -1,0 +1,31 @@
+# Ignorar archivos de configuración del entorno
+.env
+.env.local
+
+# Ignorar los directorios de caché y log
+/storage/*
+/bootstrap/cache/*
+
+# Ignorar archivos de dependencias locales
+/vendor/
+
+# Ignorar archivos de prueba y desarrollo
+/tests/
+phpunit.xml
+phpunit.xml.dist
+
+# Ignorar archivos de configuración de IDEs
+.idea/
+.vscode/
+
+# Ignorar archivos generados por Composer (si es que no los has instalado ya)
+composer.lock
+
+# Ignorar archivos temporales o no importantes
+*.log
+*.bak
+*.swp
+
+# Ignorar directorios de node_modules (si tu proyecto también tiene frontend con Node.js)
+node_modules/
+npm-debug.log
